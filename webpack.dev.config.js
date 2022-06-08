@@ -5,9 +5,15 @@ const {CleanWebpackPlugin}=require('clean-webpack-plugin');
 const HtmlWebpackPlugin=require('html-webpack-plugin');
 
 module.exports={
-    entry:'./src/index.js',
+    //FOR SINGLE FILE USE BELOW
+    //entry:'./src/index.js',
+    //FOR MULTIPLE FILES USE BELOW
+    entry:{
+        'index':'./src/index.js',
+        'kiwi':'./src/kiwi.js',
+    },
     output:{
-        filename:'bundle.js', //[contenthash] ONLY IN DEV
+        filename:'[name].js', //[name] to keep the file sync with the multiple file as per the name under entry object & [contenthash] ONLY IN DEV
         path:path.resolve(__dirname,'./dist'),
         //publicPath:'dist/' // for local directory
         //publicPath: 'https://some-cdn.com/', //for cdn we need to define the URL here
@@ -23,6 +29,13 @@ module.exports={
             writeToDisk:true, //this is to save the files to disk i.e. to kept the file inside the dist folder in this case (true), else it will be kept in the memory only (false)
         }
     },
+    //USE BELOW ONLY IN PROD AS WE DONT WANT TO OPTIMIZE CODE ON DEV ENV
+    // optimization:{
+    //     splitChunks:{
+    //         chunks:'all',
+    //         minSize:3000
+    //     }
+    // },
     module:{
         rules:[
             //FOR ASSET/RESOURCE
@@ -99,6 +112,7 @@ module.exports={
         // }),
         new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
+            filename:'index.html',
             title:'WEBPACK-5 HTML page from Dist folder',
             //IF NO TEMPLATE THEN META
             // meta:{
@@ -109,7 +123,23 @@ module.exports={
             template:'src/index.hbs',
             description:'some-description',
             keywords:'webpack5 learn webpack',
-            og:'test'
+            og:'test',
+            chunks:['index']
+        }),
+        new HtmlWebpackPlugin({
+            filename:'kiwi.html',
+            title:'WEBPACK-5 HTML page from Dist folder',
+            //IF NO TEMPLATE THEN META
+            // meta:{
+            //     description:'some-description',
+            //     keywords:'webpack5 learn webpack'
+            // },
+            //IF TEMPLATE THEN NO META
+            template:'src/index.hbs',
+            description:'some-description',
+            keywords:'webpack5 learn webpack',
+            og:'test',
+            chunks:['kiwi']
         })
     ]
 }

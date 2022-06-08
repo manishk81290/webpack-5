@@ -5,14 +5,26 @@ const {CleanWebpackPlugin}=require('clean-webpack-plugin');
 const HtmlWebpackPlugin=require('html-webpack-plugin');
 
 module.exports={
-    entry:'./src/index.js',
+    //FOR SINGLE HTML FILE USE BELOW
+    //entry:'./src/index.js',
+    //FOR MULTIPLE HTML PAGE USE BELOW
+    entry:{
+        'index':'./src//index.js',
+        'kiwi':'./src/kiwi.js'
+    },
     output:{
-        filename:'bundle.[contenthash].js', //[contenthash]
+        filename:'[name].[contenthash].js', // [name] - for sync with entry multiple page name & [contenthash] to keep the file updated if there is any change else remain same
         path:path.resolve(__dirname,'./dist'),
         //publicPath:'dist/' // for local directory
         //publicPath: 'https://some-cdn.com/', //for cdn we need to define the URL here
     },
     mode:'production', //none will not have process.env.NODE_ENV access [none, development, production]
+    optimization:{
+        splitChunks:{
+            chunks:'all',
+            minSize:3000,
+        }
+    },
     module:{
         rules:[
             //FOR ASSET/RESOURCE
@@ -83,11 +95,12 @@ module.exports={
     plugins:[
         //new TerserWebpackPlugin(), //DEFAULT IN PRODUCTION MODE
         new MiniCssExtractPlugin({
-            filename:'styles.[contenthash].css',
+            filename:'[name].[contenthash].css', // [name] - for sync with entry multiple page name & [contenthash] to keep the file updated if there is any change else remain same
         }),
         new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
-            title:'WEBPACK-5 HTML page from Dist folder',
+            filename:'index.html',
+            title:'WEBPACK-5 HTML page from Dist folder - INDEX',
             //IF NO TEMPLATE THEN META
             // meta:{
             //     description:'some-description',
@@ -95,9 +108,25 @@ module.exports={
             // },
             //IF TEMPLATE THEN NO META
             template:'src/index.hbs',
-            description:'some-description',
-            keywords:'webpack5 learn webpack',
-            og:'test'
+            description:'index-some-description',
+            keywords:'webpack5, learn webpack, index',
+            og:'test-index',
+            chunks:['index']
+        }),
+        new HtmlWebpackPlugin({
+            filename:'kiwi.html',
+            title:'WEBPACK-5 HTML page from Dist folder - KIWI',
+            //IF NO TEMPLATE THEN META
+            // meta:{
+            //     description:'some-description',
+            //     keywords:'webpack5 learn webpack'
+            // },
+            //IF TEMPLATE THEN NO META
+            template:'src/index.hbs',
+            description:'kiwi-some-description',
+            keywords:'webpack5, learn webpack, kiwi',
+            og:'test-kiwi',
+            chunks:['kiwi']
         })
     ]
 }
