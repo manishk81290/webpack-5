@@ -9,13 +9,13 @@ module.exports={
     //entry:'./src/index.js',
     //FOR MULTIPLE HTML PAGE USE BELOW
     entry:{
-        'index':'./src//index.js',
+        'index':'./src/index.js',
         'kiwi':'./src/kiwi.js'
     },
     output:{
         filename:'[name].[contenthash].js', // [name] - for sync with entry multiple page name & [contenthash] to keep the file updated if there is any change else remain same
         path:path.resolve(__dirname,'./dist'),
-        //publicPath:'dist/' // for local directory
+        publicPath:'/static/' // for local directory
         //publicPath: 'https://some-cdn.com/', //for cdn we need to define the URL here
     },
     mode:'production', //none will not have process.env.NODE_ENV access [none, development, production]
